@@ -24,7 +24,7 @@ export default function Navbar() {
           <ThemeController />
 
           <Link
-            href={'/test'}
+            href={'/auth/sign-up'}
             className={cn(
               buttonVariants({
                 size: 'icon',

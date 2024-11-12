@@ -5,8 +5,11 @@ import { client } from '@/lib/hono'
 import { Post } from '@prisma/client'
 import PostForm from '@/components/post-form'
 import { useQuery } from '@tanstack/react-query'
+import { useSession } from 'next-auth/react'
 
 export default function Home() {
+  const { data: session, status } = useSession()
+
   const { data, isPending } = useQuery({
     queryKey: ['get-recent-post'],
     queryFn: async () => {
@@ -14,6 +17,8 @@ export default function Home() {
       return (await res.json()) as Post[]
     },
   })
+
+  console.log({ session, status })
 
   return (
     <div className="flex h-full w-full flex-col items-center justify-center gap-4">
