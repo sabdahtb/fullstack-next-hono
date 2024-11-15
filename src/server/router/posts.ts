@@ -10,7 +10,7 @@ export const postRouter = app
     const db = prisma()
     const data = await db.post.findMany({ orderBy: { updatedAt: 'desc' } })
 
-    return superJsonResponse(data, 201)
+    return superJsonResponse(data, 200)
   })
   .post(
     'test',
@@ -30,7 +30,6 @@ export const postRouter = app
         },
       })
 
-      console.log({ values })
       const data = {
         user: {
           name: 'John Doe',
@@ -39,6 +38,6 @@ export const postRouter = app
         timestamp: new Date(),
       }
 
-      return c.json(data, 200)
+      return c.json(data, 201)
     }
   )

@@ -43,7 +43,6 @@ export const client = hc<AppType>(getBaseUrl(), {
       try {
         return JSON.parse(text)
       } catch (error) {
-        console.error('Failed to parse response as JSON:', error)
         throw new Error('Invalid JSON response')
       }
     }

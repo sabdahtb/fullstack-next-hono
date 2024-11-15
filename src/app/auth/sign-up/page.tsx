@@ -2,7 +2,7 @@
 
 import * as z from 'zod'
 import { useForm } from 'react-hook-form'
-import { useState, useTransition } from 'react'
+import { useTransition } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 
 import { Button } from '@/components/ui/button'
@@ -17,8 +17,11 @@ import {
 import { Input } from '@/components/ui/input'
 import { signup } from './action'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
+import { toast } from 'sonner'
+import { useUser, defaultUser } from '@/store/user'
 
-export const SignupSchema = z
+const SignupSchema = z
   .object({
     email: z
       .string()
@@ -42,9 +45,7 @@ export const SignupSchema = z
 
 const SignupForm = () => {
   const router = useRouter()
-
-  const [error, setError] = useState<string | undefined>()
-  const [success, setSuccess] = useState<string | undefined>()
+  const { user, setUser } = useUser()
   const [isPending, startTransition] = useTransition()
 
   const form = useForm({
@@ -58,24 +59,30 @@ const SignupForm = () => {
   })
 
   const onSubmit = async (values: z.infer<typeof SignupSchema>) => {
-    setError('')
-    setSuccess('')
-
-    // Start the form submission process
     startTransition(() => {
       signup(values).then((data) => {
-        setSuccess(data?.success)
-        setError(data?.error)
+        if (data.success) {
+          toast.success(data?.success)
+          setUser({
+            ...defaultUser,
+            name: values.name,
+          })
+        }
+        if (data.error) {
+          toast.error(data?.error)
+        }
 
         if (data.redirect) {
-          router.push(data.redirect)
+          setTimeout(() => {
+            router.push(data.redirect)
+          }, 100)
         }
       })
     })
   }
 
   return (
-    <div className="flex w-full flex-col items-center space-y-6">
+    <div className="flex h-full w-full flex-col items-center justify-center gap-6">
       <div className="text-center">
         <h1 className="text-3xl font-bold">Create an Account</h1>
         <h3 className="text-muted-foreground">Fill in the form to sign up</h3>
@@ -108,7 +115,6 @@ const SignupForm = () => {
             )}
           />
 
-          {/* Email Field */}
           <FormField
             control={form.control}
             name="email"
@@ -130,7 +136,6 @@ const SignupForm = () => {
             )}
           />
 
-          {/* Password Field */}
           <FormField
             control={form.control}
             name="password"
@@ -152,7 +157,6 @@ const SignupForm = () => {
             )}
           />
 
-          {/* Confirm Password Field */}
           <FormField
             control={form.control}
             name="confirmPassword"
@@ -174,20 +178,17 @@ const SignupForm = () => {
             )}
           />
 
-          {/* Error Message */}
-          {error && <div className="text-center text-red-500">{error}</div>}
-
-          {/* Success Message */}
-          {success && (
-            <div className="text-center text-green-500">{success}</div>
-          )}
-
-          {/* Submit Button */}
           <Button disabled={isPending} className="w-full">
             Sign Up
           </Button>
         </form>
       </Form>
+      <p className="text-sm text-secondary-foreground">
+        {`Already have an account?`}{' '}
+        <Link href={'/auth/sign-in'} className="font-semibold text-blue-500">
+          Sign in
+        </Link>
+      </p>
     </div>
   )
 }

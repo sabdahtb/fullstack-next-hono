@@ -58,7 +58,6 @@ export const signup = async (values: z.infer<typeof SignupSchema>) => {
       redirect: false,
     })
   } catch (error) {
-    console.error('Error during signup:', error)
     return { error: 'Something went wrong while creating your account.' }
   }
 

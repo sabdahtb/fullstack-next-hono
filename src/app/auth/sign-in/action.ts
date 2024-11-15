@@ -38,7 +38,7 @@ export const signin = async (values: z.infer<typeof SigninSchema>) => {
     await signIn('credentials', {
       email,
       password,
-      redirectTo: '/',
+      redirect: false,
     })
   } catch (error) {
     if (error instanceof AuthError) {
@@ -53,5 +53,5 @@ export const signin = async (values: z.infer<typeof SigninSchema>) => {
     throw error
   }
 
-  return { success: 'Login successful!' }
+  return { success: 'Login successful!', redirect: '/' }
 }

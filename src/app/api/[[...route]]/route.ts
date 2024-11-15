@@ -5,5 +5,6 @@ export {
   httpHandler as GET,
   httpHandler as POST,
   httpHandler as PUT,
+  httpHandler as PATCH,
   httpHandler as DELETE,
 }
