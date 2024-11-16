@@ -12,6 +12,10 @@ This is a full-stack web application built with Next.js, TypeScript, Hono, Prism
 - **ShadCN UI**: A component library for building modern UIs.
 - **TanStack Query**: A data fetching library for React.
 - **Bun**: A fast JavaScript runtime like Node.js, with a focus on performance.
+- **NextAuth**: A complete authentication solution for Next.js applications.
+- **Pinata Cloud**: A service for storing files on IPFS (InterPlanetary File System).
+- **Zustand**: A small, fast, and scalable state management library for React.
+- **CryptoJS**: A library for secure cryptography operations, used for persisting Zustand state securely in localStorage.
 
 ## Getting Started
 
