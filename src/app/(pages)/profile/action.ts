@@ -28,8 +28,8 @@ export const uploadImage = async (values: z.infer<typeof UploadSchema>) => {
     const upload = await pinata.upload.file(values.image).group(groupId)
 
     if (upload.cid) {
-      const url = await getPinataurl(upload.cid)
-      return { success: 'Success upload image', url, cid: upload.cid }
+      const imageUrl = await getPinataurl(upload.cid)
+      return { success: 'Success upload image', cid: upload.cid, imageUrl }
     }
 
     return { success: 'Success upload image' }

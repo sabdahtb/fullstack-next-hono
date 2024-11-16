@@ -1,9 +1,8 @@
 'use client'
 
-import React, { useCallback, useEffect, useState, useTransition } from 'react'
+import React, { useEffect, useState, useTransition } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { isEqual } from 'lodash'
 
 import { ThemeController } from '@/components/theme-controller'
 import { useSession } from 'next-auth/react'
@@ -17,16 +16,16 @@ import {
 import { useRouter } from 'next/navigation'
 import { signout } from './action'
 import { defaultUser, useUser } from '@/store/user'
-import { timestampExp, timestampNow } from '@/lib/utils'
-import { getPinataurl } from '@/lib/pinata'
 
 export default function Navbar() {
   const router = useRouter()
-  const { data: session } = useSession()
   const { user, setUser } = useUser()
-
+  const { update } = useSession()
   const [isPending, startTransition] = useTransition()
-  const [initial, setInitial] = useState<string>('')
+  const [userData, setuserData] = useState<{
+    initial: string
+    imageUrl: string
+  }>({ initial: '', imageUrl: '' })
 
   function getInitials(fullName: string): string {
     const nameParts = fullName.split(' ')
@@ -40,38 +39,32 @@ export default function Navbar() {
     return String(firstInitial + lastInitial).toUpperCase()
   }
 
-  const handleProfileImage = useCallback(async () => {
-    if (isEqual(user, defaultUser)) return
-
-    const now = timestampNow()
-    const condition1 = now >= user.expired
-    const condition2 = user.expired === 0 && session?.user.image != null
-
-    if (condition1 || condition2) {
-      const imageUrl = await getPinataurl(session?.user.image ?? '')
-      setUser({ ...user, imageUrl, expired: timestampExp(7) })
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [session])
-
   async function logout() {
     startTransition(() => {
       signout().then((data) => {
         if (data.redirect) {
+          const expired = user.expired > 0 ? user.expired : 0
+          if (!user.remember) {
+            setUser({ ...defaultUser, expired })
+          }
+          setUser({
+            ...defaultUser,
+            expired,
+            email: user.email,
+            password: user.password,
+            remember: user.remember,
+          })
           router.push(data.redirect)
+          update(null)
         }
       })
     })
   }
 
   useEffect(() => {
-    const initial = getInitials(session?.user?.name ?? '')
-    setInitial(initial)
-  }, [session])
-
-  useEffect(() => {
-    handleProfileImage()
-  }, [handleProfileImage, session])
+    const initial = getInitials(user.name)
+    setuserData({ initial, imageUrl: user.imageUrl })
+  }, [user])
 
   return (
     <div className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 dark:border-border">
@@ -92,12 +85,12 @@ export default function Navbar() {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Avatar className="cursor-pointer select-none">
-                {user.imageUrl === '' ? (
-                  <AvatarFallback>{initial ?? '--'}</AvatarFallback>
+                {userData.imageUrl === '' ? (
+                  <AvatarFallback>{userData.initial ?? '--'}</AvatarFallback>
                 ) : (
                   <>
-                    <AvatarImage src={user.imageUrl} alt="profile" />
-                    <AvatarFallback>{initial ?? '--'}</AvatarFallback>
+                    <AvatarImage src={userData.imageUrl} alt="profile" />
+                    <AvatarFallback>{userData.initial ?? '--'}</AvatarFallback>
                   </>
                 )}
               </Avatar>

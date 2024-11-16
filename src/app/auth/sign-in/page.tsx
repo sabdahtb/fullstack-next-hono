@@ -54,8 +54,11 @@ const SignInForm = () => {
       signin(values).then((data) => {
         if (data.success) {
           toast.success(data?.success)
+
+          const expired = user.expired > 0 ? user.expired : 0
           setUser({
             ...defaultUser,
+            expired,
             email: values.email,
             password: encryptString(values.password),
             remember: values.rememberMe === true,

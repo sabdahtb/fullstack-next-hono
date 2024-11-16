@@ -24,13 +24,14 @@ export const userRouter = app
       return superJsonResponse(user, 200)
     }
   )
-  .patch(
-    'image',
+  .put(
+    '',
     zValidator(
       'json',
       z.object({
         id: z.string(),
         cid: z.string(),
+        imageUrl: z.string(),
       })
     ),
     async (c) => {
@@ -49,6 +50,7 @@ export const userRouter = app
         where: { id: values?.id },
         data: {
           image: values?.cid,
+          imageUrl: values.imageUrl,
         },
       })
 

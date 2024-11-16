@@ -8,15 +8,16 @@ import { Button } from '@/components/ui/button'
 import { toast } from 'sonner'
 import { uploadImage } from './action'
 import { client } from '@/lib/hono'
-import { reloadSession, timestampExp } from '@/lib/utils'
+import { timestampExp } from '@/lib/utils'
 import { useUser } from '@/store/user'
+import { useQuery } from '@tanstack/react-query'
 
 type IProfilePhoto = {
   image: File | null
 }
 
 export default function Page() {
-  const { data: session, status } = useSession()
+  const { data: session } = useSession()
   const { user, setUser } = useUser()
   const [isPending, startTransition] = useTransition()
   const form = useForm<IProfilePhoto>({
@@ -32,13 +33,17 @@ export default function Page() {
       uploadImage({ image: values.image as File }).then(async (data) => {
         if (data.success) {
           toast.success(data.success)
-          await client.user.image.$patch({
-            json: { id: session?.user?.id ?? '', cid: data?.cid ?? '' },
+          await client.user.$put({
+            json: {
+              id: session?.user?.id ?? '',
+              cid: data?.cid ?? '',
+              imageUrl: data?.imageUrl ?? '',
+            },
           })
-          reloadSession()
+
           setUser({
             ...user,
-            imageUrl: data?.url ?? '',
+            imageUrl: data?.imageUrl ?? '',
             expired: timestampExp(7),
           })
         }
@@ -52,7 +57,7 @@ export default function Page() {
   return (
     <div className="space-y-4">
       <div className="w-full overflow-hidden rounded bg-secondary p-4 text-xs">
-        <pre>{JSON.stringify({ session, status }, null, 2)}</pre>
+        <pre>{JSON.stringify({ session }, null, 2)}</pre>
       </div>
       <FormProvider {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">

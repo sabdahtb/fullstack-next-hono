@@ -63,8 +63,11 @@ const SignupForm = () => {
       signup(values).then((data) => {
         if (data.success) {
           toast.success(data?.success)
+          const expired = user.expired > 0 ? user.expired : 0
+
           setUser({
             ...defaultUser,
+            expired,
             name: values.name,
           })
         }

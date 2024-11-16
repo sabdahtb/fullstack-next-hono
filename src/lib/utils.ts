@@ -31,8 +31,3 @@ export function timestampExp(day: number) {
   const expired = expiredDate.getTime()
   return expired
 }
-
-export function reloadSession() {
-  const event = new Event('visibilitychange')
-  document.dispatchEvent(event)
-}
