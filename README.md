@@ -1,8 +1,28 @@
-# Nextjs 15 Hono Boilerplate
+# Full-Stack Web Starter with Next.js, Hono, and Bun
 
-This is a full-stack web application built with Next.js, TypeScript, Hono, Prisma, Tailwind CSS, ShadCN UI, and TanStack Query.
+A full-stack web application starter template built with modern technologies like **Next.js**, **Hono**, **Bun**, **Prisma**, **NextAuth**, **Zustand**, and **Tailwind CSS**. This boilerplate aims to provide a scalable and high-performance foundation for building full-stack applications.
 
-## Technologies Used
+## 📚 Table of Contents
+
+- [Features](#features)
+- [Technologies Used](#technologies-used)
+- [Getting Started](#getting-started)
+- [Database Setup](#database-setup)
+- [Scripts](#scripts)
+- [License](#license)
+
+## 🚀 Features
+
+- **Full-Stack Framework**: Built with Next.js for server-side rendering and Hono for lightweight API routing.
+- **High Performance**: Powered by Bun, a fast JavaScript runtime.
+- **Database ORM**: Prisma for seamless database management.
+- **Authentication**: Integrated with NextAuth for secure user authentication.
+- **Modern Styling**: Styled with Tailwind CSS and ShadCN UI components.
+- **State Management**: Uses Zustand for lightweight and scalable state management.
+- **Secure Data Persistence**: Zustand state persisted in localStorage with CryptoJS encryption.
+- **File Storage**: Uses Pinata Cloud for storing files on IPFS.
+
+## 🛠️ Technologies Used
 
 - **Next.js**: A React framework for building full-stack applications.
 - **TypeScript**: JavaScript with type safety.
@@ -13,58 +33,91 @@ This is a full-stack web application built with Next.js, TypeScript, Hono, Prism
 - **TanStack Query**: A data fetching library for React.
 - **Bun**: A fast JavaScript runtime like Node.js, with a focus on performance.
 - **NextAuth**: A complete authentication solution for Next.js applications.
-- **Pinata Cloud**: A service for storing files on IPFS (InterPlanetary File System).
+- **Pinata Cloud**: A service for storing files on IPFS.
 - **Zustand**: A small, fast, and scalable state management library for React.
 - **CryptoJS**: A library for secure cryptography operations, used for persisting Zustand state securely in localStorage.
 
-## Getting Started
+## 🏁 Getting Started
 
-To get started with this project locally, follow these steps:
+### Prerequisites
 
-### 1. Clone the repository
+- [Node.js](https://nodejs.org/) or [Bun](https://bun.sh/) installed
 
-```bash
-git clone https://github.com/your-username/your-repo.git
-cd your-repo
-```
+### Installation
 
-### 2. Install dependencies
+1. Clone the repository:
 
-Since you're using Bun, use the following command to install dependencies:
+   ```bash
+   git clone https://github.com/sabdahtb/fullstack-next-hono
+   cd fullstack-next-hono
+   ```
 
-```bash
-bun install
-```
+2. Install dependencies:
 
-### 3. Set up the database
+   Using Bun:
+   ```bash
+   bun install
+   ```
 
-Make sure you have a PostgreSQL, MySQL, or SQLite database set up. Then, configure your `.env` file with the appropriate database connection string.
+   Using npm:
+   ```bash
+   npm install
+   ```
 
-```bash
-# .env
-DATABASE_URL="your-database-connection-url"
-```
+3. Set up the environment variables:
 
-Run Prisma migrations to set up your database schema:
+   Create a `.env` file in the root directory and follow example from `.env.example`
 
-```bash
-bun prisma migrate dev
-```
+4. Set up the database:
 
-### 4. Start the development server
+   ```bash
+   npx prisma migrate dev --name init
+   npx prisma generate
+   ```
 
-```bash
-bun run dev
-```
+5. Start the development server:
 
-Your application should now be running at [http://localhost:3000](http://localhost:3000).
+   Using Bun:
+   ```bash
+   bun dev
+   ```
 
-## License
+   Using npm:
+   ```bash
+   npm run dev
+   ```
 
-This project is licensed under the MIT License.
+6. Open your browser and navigate to:
 
-### Key Changes:
-1. **Bun Commands**: The `bun install` and `bun run dev` commands are used for installing dependencies and starting the development server, instead of `npm` or `yarn`.
-2. **Prisma**: Prisma is still used for managing the database, and the `bun prisma migrate dev` command will work with Bun's runtime.
+   ```
+   http://localhost:3000
+   ```
 
-This should work well with Bun as the runtime for your Next.js project!
+## 🗃️ Database Setup
+
+This project uses **Prisma** for database management. To set up your database:
+
+1. Ensure you have a running database instance (e.g., MySQL, PostgreSQL).
+2. Update the `DATABASE_URL` in your `.env` file with your database connection string.
+3. Run the migration and generate Prisma client:
+
+   ```bash
+   npx prisma migrate dev
+   npx prisma generate
+   ```
+
+## 📜 Scripts
+
+- **`bun dev`** / **`npm run dev`**: Start the development server.
+- **`bun build`** / **`npm run build`**: Build the project for production.
+- **`bun start`** / **`npm start`**: Start the production server.
+- **`prisma migrate dev`**: Run Prisma migrations.
+- **`prisma studio`**: Open Prisma Studio to interact with your database.
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+Feel free to customize this template according to your project's specific needs!
